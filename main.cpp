@@ -6,10 +6,15 @@
 int main()
 {
 
+    // Initialize Parameters
     int nodeTotal = 0;
+    
+    do
+    {
+        std::cout << "Choose the total number of nodes from the options (8, 16, 32) : ";
+        std::cin >> nodeTotal;
 
-    std::cout << "Input the number of nodes in this system" << std::endl;
-    std::cin >> nodeTotal;
+    }while(nodeTotal != 8 && nodeTotal != 16 && nodeTotal != 32);
 
     // 2D Vector to hold the nodes within a grid system
     Node* nodeGrid[nodeTotal][nodeTotal];
@@ -26,6 +31,8 @@ int main()
     }
 
     // Based on how many nodes are selected create nodes in the grid
+    // To keep the nodes far enough and spread out, break the grid into quadrants
+
 
     return 0;
 
