@@ -17,6 +17,7 @@ void printNodes(Node **array, int size)
             std::cout << array[x][y].printNode() << "|";
 
         }
+        std::cout << std::endl;
     }
 
 
@@ -48,7 +49,7 @@ int main()
 
     // Based on how many nodes are selected create nodes in the grid
     // To keep the nodes far enough and spread out, break the grid into quadrants
-    //printNodes();
+    printNodes(nodeGrid, nodeTotal);
 
 
     return 0;

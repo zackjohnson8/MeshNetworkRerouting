@@ -28,7 +28,8 @@ const std::string Node::printNode()
 
     }
 
-    return std::string();
+    //return std::string();
+    return "0";
 
 }
 
