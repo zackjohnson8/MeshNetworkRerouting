@@ -1,0 +1,53 @@
+NETWORK 400 Group Project
+
+Dynamic Routing Mechanism Design in Faulty Networks:
+This team will simulate a mesh network where nodes and links may fail. Nodes and links may fail 
+intermittently, as an input to the simulation, each node & link will have a certain probability to fail.
+When such failures occur, the network must adapt & re-route to avoid the faulty link/node.
+
+MESH NETWORKS:
+
+- Can relay messages using either flooding technique or routing technique.
+- Fixing itself using shortest path bridging.
+
+MESH NETWORKS MESSAGE TECHNIQUES:
+
+- flooding technique: Sending the message to each child which then sends the message to all its children.
+    (can use ACK or non ACK type)
+- routing technique: Is based on the multicast, unicast, ... and so on. This sounds like a form of porting 
+    in which each node waits for a specific port call to then receive the message.
+
+SOLVING PROBLEMS:
+
+- Mesh networks don't connect dynamically and non-hierarchically
+- Each node knows it's neighbor, so how would it know the shortest distance from one node to another?
+
+THOUGHTS:
+
+- Based on the SOAR article, they are using an opportunistic routing technique that doesn't calculate the final route at the beginning.
+  Instead the nodes broadcast to their neighbor nodes to have them calculate and choose who are the best senders. Why not calculate the best route from the beginning,
+  if at any point the next correct node does not seem to be reponding, restart the calculation from current node to final node.
+
+
+AFTER READING SOAR Opportunistic Routing:
+
+- 
+
+
+
+LINKS
+
+IEEE: http://ieeexplore.ieee.org/document/4912211/#full-text-section
+
+FORMAT EXAMPLE: http://delivery.acm.org/10.1145/1030000/1023732/p114-draves.pdf?ip=134.197.0.24&id=1023732&acc=ACTIVE%20SERVICE&key=0763E6FB82016B22%2E4D4702B0C3E38B35%2E4D4702B0C3E38B35%2E4D4702B0C3E38B35&CFID=831428139&CFTOKEN=38834395&__acm__=1511135886_474202ae7b6be511406102855efafe4e
+
+//////////////////////////////////////////////////////
+
+456 Quiz Study
+
+TOPICS:
+    - PDA
+
+Wednesday, Nov 22nd,
+
+- Build out node system to represent nodes
