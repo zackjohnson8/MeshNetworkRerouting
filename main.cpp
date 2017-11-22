@@ -112,6 +112,35 @@ void setNeighbors(Node **array, int size)
         }
     }
 
+    // Check to see that all nodes have atleast one neighbor
+    int holdX;
+    int holdY;
+    for(int x = 0; x < size; x++)
+    {
+        for(int y = 0; y < size; y++)
+        {
+            if(array[x][y].haveNeighbor())
+            {
+
+                // has atleast one neighbor
+
+            }else
+            {
+                // doesn't have a neighbor, fix that.
+                holdX = x;
+                holdY = y;
+                while(array[x][y].haveNeighbor())
+                {
+
+                    // TODO
+
+                }
+
+            }
+        }
+
+    }
+
 }
 
 bool takenPosition(Node **array, int posX, int posY)

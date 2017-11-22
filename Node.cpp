@@ -47,6 +47,20 @@ void Node::addNeighbor(int x, int y)
 
 }
 
+bool Node::haveNeighbor()
+{
+
+    if(neighborStructs.size() == 0)
+    {
+
+        return false;
+
+    }
+
+    return true;
+
+}
+
 std::string Node::printNodeScreen()
 {
 

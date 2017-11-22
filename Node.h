@@ -24,6 +24,7 @@ public:
     void activateNode(int, int);
     bool isActive();
     void addNeighbor(int, int);
+    bool haveNeighbor();
 
 private:
 
