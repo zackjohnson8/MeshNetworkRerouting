@@ -43,6 +43,77 @@ void printNodes(Node **array, int size)
 
 }
 
+void setNeighbors(Node **array, int size)
+{
+
+    int xDif;
+    int yDif;
+    for(int x = 0; x < size; x++)
+    {
+        for(int y = 0; y < size; y++)
+        {
+
+            if(array[x][y].isActive())
+            {
+
+                // Check active nodes to see if they are a neighbor
+                for(int a = 0; a < size; a++)
+                {
+
+                    for(int b = 0; b < size; b++)
+                    {
+
+                        if(array[a][b].isActive())
+                        {
+
+                            if(x == a && y == b)
+                            {
+
+                                // do nothing, self
+
+                            }else
+                            {
+
+                                // check if within distance
+                                xDif = x - a;
+                                yDif = y - b;
+
+                                if(xDif < 0)
+                                {
+                                    // change to positive
+                                    xDif *= -1;
+                                }
+
+                                if(yDif < 0)
+                                {
+                                    // change to positive
+                                    yDif *= -1;
+                                }
+
+                                if((xDif+yDif) <= (size/2))
+                                {
+
+                                    // make a,b node a neighbor of x,y node
+                                    array[x][y].addNeighbor(a,b);
+
+                                }
+
+                            }
+                            
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+    }
+
+}
+
 bool takenPosition(Node **array, int posX, int posY)
 {
 
@@ -54,6 +125,28 @@ bool takenPosition(Node **array, int posX, int posY)
     }
 
     return false;
+
+}
+
+void activateNodes(Node **array, int size)
+{
+
+    int holdRandX;
+    int holdRandY;
+    for(int x = 0; x < size; x++)
+    {
+
+        do
+        {
+            holdRandX = rand()%size;
+            holdRandY = rand()%size;
+        }while(takenPosition(array, holdRandX, holdRandY));
+
+        // activate said node
+        array[holdRandX][holdRandY].activateNode(holdRandX, holdRandY);
+
+
+    }
 
 }
 
@@ -98,89 +191,10 @@ int main()
     }
 
     // Activate nodeTotal amount of position in the array
-    int holdRandX;
-    int holdRandY;
-    for(int x = 0; x < nodeTotal; x++)
-    {
-
-        do
-        {
-            holdRandX = rand()%nodeTotal;
-            holdRandY = rand()%nodeTotal;
-        }while(takenPosition(nodeGrid, holdRandX, holdRandY));
-
-        // activate said node
-        nodeGrid[holdRandX][holdRandY].activateNode(holdRandX, holdRandY);
-
-
-    }
+    activateNodes(nodeGrid, nodeTotal);
 
     // Give neighbors to each active node
-    int xDif;
-    int yDif;
-    for(int x = 0; x < nodeTotal; x++)
-    {
-        for(int y = 0; y < nodeTotal; y++)
-        {
-
-            if(nodeGrid[x][y].isActive())
-            {
-
-                // Check active nodes to see if they are a neighbor
-                for(int a = 0; a < nodeTotal; a++)
-                {
-
-                    for(int b = 0; b < nodeTotal; b++)
-                    {
-
-                        if(nodeGrid[a][b].isActive())
-                        {
-
-                            if(x == a && y == b)
-                            {
-
-                                // do nothing, self
-
-                            }else
-                            {
-
-                                // check if within distance
-                                xDif = x - a;
-                                yDif = y - b;
-
-                                if(xDif < 0)
-                                {
-                                    // change to positive
-                                    xDif *= -1;
-                                }
-
-                                if(yDif < 0)
-                                {
-                                    // change to positive
-                                    yDif *= -1;
-                                }
-
-                                if((xDif+yDif) <= (nodeTotal/2))
-                                {
-
-                                    // make a,b node a neighbor of x,y node
-                                    nodeGrid[x][y].addNeighbor(a,b);
-
-                                }
-
-                            }
-                            
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-        }
-    }
+    setNeighbors(nodeGrid, nodeTotal);
 
     // Based on how many nodes are selected create nodes in the grid
     // To keep the nodes far enough and spread out, break the grid into quadrants
