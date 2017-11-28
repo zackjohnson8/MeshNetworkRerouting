@@ -9,8 +9,6 @@ Node::Node()
 {
 
     activeNode = false;
-    gridPosX = -1;
-    gridPosY = -1;
 
 }
 
@@ -20,12 +18,10 @@ Node::~Node()
 
 }
 
-void Node::activateNode(int posX, int posY)
+void Node::activateNode()
 {
 
     activeNode = true;
-    gridPosX = posX;
-    gridPosY = posY;
 
 }
 
@@ -36,28 +32,17 @@ bool Node::isActive()
 
 }
 
-void Node::addNeighbor(int x, int y)
+void Node::addNeighbor(Node* newNeighbor)
 {
 
-    Neighbor* newNeighbor = new Neighbor();
-    newNeighbor->xPos = x;
-    newNeighbor->yPos = y;
-
-    neighborStructs.push_back(*newNeighbor);
+    neighborStructs.push_back(newNeighbor);
 
 }
 
-bool Node::haveNeighbor()
+int Node::getNeighborCount()
 {
 
-    if(neighborStructs.size() == 0)
-    {
-
-        return false;
-
-    }
-
-    return true;
+    return neighborStructs.size();
 
 }
 

@@ -5,8 +5,9 @@
 #include <time.h>
 #include "Node.h"
 
+const int nodeTotal = 16; // Number of nodes in the program
 
-void printNodes(Node **array, int size)
+void printNodes(Node **array)
 {
 
     std::ofstream outputFile;
@@ -16,9 +17,9 @@ void printNodes(Node **array, int size)
     std::cout << "---------------------------------------------------" << std::endl;
     outputFile << "-----------------------NEW PRINT NODE STATUS OUTPUT---------------------" << std::endl;
 
-    for(int x = 0; x < size; x++)
+    for(int x = 0; x < nodeTotal; x++)
     {
-        for(int y = 0; y < size; y++)
+        for(int y = 0; y < nodeTotal; y++)
         {
 
             outputFile << array[x][y].printNodeFile() << std::endl;
@@ -27,9 +28,9 @@ void printNodes(Node **array, int size)
 
     }
 
-    for(int x = 0; x < size; x++)
+    for(int x = 0; x < nodeTotal; x++)
     {
-        for(int y = 0; y < size; y++)
+        for(int y = 0; y < nodeTotal; y++)
         {
             std::cout << "| ";
             std::cout << array[x][y].printNodeScreen();
@@ -43,148 +44,113 @@ void printNodes(Node **array, int size)
 
 }
 
-void setNeighbors(Node **array, int size)
+// Hard code neighbor position
+void setNeighbors(Node **array)
 {
 
-    int xDif;
-    int yDif;
-    for(int x = 0; x < size; x++)
-    {
-        for(int y = 0; y < size; y++)
-        {
+    // Node 1
+    array[0][0].addNeighbor(&array[0][3]);
+    array[0][0].addNeighbor(&array[3][0]);
 
-            if(array[x][y].isActive())
-            {
+    // Node 2
+    array[0][3].addNeighbor(&array[0][0]);
+    array[0][3].addNeighbor(&array[3][3]);
+    array[0][3].addNeighbor(&array[2][8]);
 
-                // Check active nodes to see if they are a neighbor
-                for(int a = 0; a < size; a++)
-                {
+    // Node 3
+    array[3][0].addNeighbor(&array[0][0]);
+    array[3][0].addNeighbor(&array[3][3]);
 
-                    for(int b = 0; b < size; b++)
-                    {
+    // Node 4
+    array[3][3].addNeighbor(&array[0][3]);
+    array[3][3].addNeighbor(&array[3][0]);
+    array[3][3].addNeighbor(&array[8][3]);
 
-                        if(array[a][b].isActive())
-                        {
+    // Node 5
+    array[2][8].addNeighbor(&array[0][3]);
+    array[2][8].addNeighbor(&array[5][8]);
+    array[2][8].addNeighbor(&array[0][13]);
+    
+    // Node 6
+    array[0][13].addNeighbor(&array[2][8]);
 
-                            if(x == a && y == b)
-                            {
+    // Node 7 
+    array[5][8].addNeighbor(&array[2][8]);
+    array[5][8].addNeighbor(&array[7][6]);
+    
+    // Node 8
+    array[7][6].addNeighbor(&array[5][8]);
+    array[7][6].addNeighbor(&array[8][3]);
+    array[7][6].addNeighbor(&array[10][9]);
+    
+    // Node 9
+    array[8][3].addNeighbor(&array[3][3]);
+    array[8][3].addNeighbor(&array[7][6]);
+    array[8][3].addNeighbor(&array[12][5]);
+    
+    // Node 10
+    array[12][5].addNeighbor(&array[8][3]);
+    array[12][5].addNeighbor(&array[10][9]);
+    
+    // Node 11
+    array[10][9].addNeighbor(&array[7][6]);
+    array[10][9].addNeighbor(&array[12][5]);
+    array[10][9].addNeighbor(&array[7][12]);
 
-                                // do nothing, self
+    // Node 12
+    array[7][12].addNeighbor(&array[10][9]);
+    array[7][12].addNeighbor(&array[11][14]);
+    array[7][12].addNeighbor(&array[11][16]);
+    
+    // Node 13
+    array[11][14].addNeighbor(&array[7][12]);
+    array[11][14].addNeighbor(&array[14][11]);
+    
+    // Node 14
+    array[11][16].addNeighbor(&array[7][12]);
+    array[11][16].addNeighbor(&array[14][11]);
+    
+    // Node 15
+    array[14][11].addNeighbor(&array[11][14]);
+    array[14][11].addNeighbor(&array[11][16]);
+    array[14][11].addNeighbor(&array[16][15]);
+    
+    // Node 16
+    array[16][15].addNeighbor(&array[14][11]);
 
-                            }else
-                            {
-
-                                // check if within distance
-                                xDif = x - a;
-                                yDif = y - b;
-
-                                if(xDif < 0)
-                                {
-                                    // change to positive
-                                    xDif *= -1;
-                                }
-
-                                if(yDif < 0)
-                                {
-                                    // change to positive
-                                    yDif *= -1;
-                                }
-
-                                if((xDif+yDif) <= (size/2))
-                                {
-
-                                    // make a,b node a neighbor of x,y node
-                                    array[x][y].addNeighbor(a,b);
-
-                                }
-
-                            }
-                            
-
-                        }
-
-                    }
-
-                }
-
-            }
-
-        }
-    }
-
-    // Check to see that all nodes have atleast one neighbor
-    int holdX;
-    int holdY;
-    for(int x = 0; x < size; x++)
-    {
-        for(int y = 0; y < size; y++)
-        {
-            if(array[x][y].haveNeighbor())
-            {
-
-                // has atleast one neighbor
-
-            }else
-            {
-                // doesn't have a neighbor, fix that.
-                holdX = x;
-                holdY = y;
-                while(array[x][y].haveNeighbor())
-                {
-
-                    // TODO
-
-                }
-
-            }
-        }
-
-    }
 
 }
 
-bool takenPosition(Node **array, int posX, int posY)
+void activateNodes(Node **array)
 {
 
-    if(array[posX][posY].isActive())
-    {
-
-        return true;
-
-    }
-
-    return false;
+    // Saying that position 0,0 in the grid should activate as a node.
+    array[0][0].activateNode(); // 1 and are labeled on hand drawn sheet
+    array[0][3].activateNode(); // 2
+    array[3][0].activateNode(); // 3
+    array[3][3].activateNode(); // 4
+    array[2][8].activateNode(); // 5
+    array[0][13].activateNode(); // 6
+    array[5][8].activateNode(); // 7
+    array[7][6].activateNode(); // 8
+    array[8][3].activateNode(); // 9
+    array[12][5].activateNode(); // 10
+    array[10][9].activateNode(); // 11
+    array[7][12].activateNode(); // 12
+    array[11][14].activateNode(); // 13
+    array[11][16].activateNode(); // 14
+    array[14][11].activateNode(); // 15
+    array[16][15].activateNode(); // 16
 
 }
 
-void activateNodes(Node **array, int size)
-{
 
-    int holdRandX;
-    int holdRandY;
-    for(int x = 0; x < size; x++)
-    {
-
-        do
-        {
-            holdRandX = rand()%size;
-            holdRandY = rand()%size;
-        }while(takenPosition(array, holdRandX, holdRandY));
-
-        // activate said node
-        array[holdRandX][holdRandY].activateNode(holdRandX, holdRandY);
-
-
-    }
-
-}
 
 int main()
 {
 
-    srand(time(NULL));
 
-    // Delete old output file
+    // Delete old output file from previous run
     if( remove( "output.txt" ) != 0 )
     {
 
@@ -196,17 +162,6 @@ int main()
         std::cout << "Successfully deleted ouput file" << std::endl;
 
     }
-    
-
-
-    // Initialize User Input Parameters
-    int nodeTotal = 0;
-    do
-    {
-        std::cout << "Choose the total number of nodes from the options (8, 16, 32) : ";
-        std::cin >> nodeTotal;
-
-    }while(nodeTotal != 8 && nodeTotal != 16 && nodeTotal != 32);
 
     // 2D Pointer Array Implementation Below 
     Node** nodeGrid;
@@ -220,14 +175,14 @@ int main()
     }
 
     // Activate nodeTotal amount of position in the array
-    activateNodes(nodeGrid, nodeTotal);
+    activateNodes(nodeGrid);
 
     // Give neighbors to each active node
-    setNeighbors(nodeGrid, nodeTotal);
+    setNeighbors(nodeGrid);
 
     // Based on how many nodes are selected create nodes in the grid
     // To keep the nodes far enough and spread out, break the grid into quadrants
-    printNodes(nodeGrid, nodeTotal);
+    printNodes(nodeGrid);
 
 
     return 0;

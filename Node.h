@@ -4,13 +4,6 @@
 #include <string>
 #include <vector>
 
-struct Neighbor{
-
-    int xPos;
-    int yPos;
-
-};
-
 class Node
 {
 
@@ -21,17 +14,15 @@ public:
     ~Node();
     std::string printNodeFile();
     std::string printNodeScreen();
-    void activateNode(int, int);
+    void activateNode();
     bool isActive();
-    void addNeighbor(int, int);
-    bool haveNeighbor();
+    void addNeighbor(Node*);
+    int getNeighborCount();
 
 private:
 
     bool activeNode;
-    int gridPosX;
-    int gridPosY;
-    std::vector<Neighbor> neighborStructs;
+    std::vector<Node*> neighborStructs;
 
 };
 
