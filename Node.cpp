@@ -9,6 +9,8 @@ Node::Node()
 {
 
     activeNode = false;
+    posX = -1;
+    posY = -1;
 
 }
 
@@ -18,10 +20,12 @@ Node::~Node()
 
 }
 
-void Node::activateNode()
+void Node::activateNode(int x, int y)
 {
 
     activeNode = true;
+    posX = x;
+    posY = y;
 
 }
 
@@ -45,6 +49,14 @@ int Node::getNeighborCount()
     return neighborStructs.size();
 
 }
+
+void Node::deliverPackage(Node* destNode)
+{
+
+    std::cout << "Received package at postion (" << posX << ", " << posY << ")" << std::endl;
+
+}
+
 
 std::string Node::printNodeScreen()
 {

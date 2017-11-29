@@ -2,7 +2,6 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
-#include <time.h>
 #include "Node.h"
 
 const int nodeTotal = 16; // Number of nodes in the program
@@ -100,23 +99,23 @@ void setNeighbors(Node **array)
     // Node 12
     array[7][12].addNeighbor(&array[10][9]);
     array[7][12].addNeighbor(&array[11][14]);
-    array[7][12].addNeighbor(&array[11][16]);
+    array[7][12].addNeighbor(&array[11][15]);
     
     // Node 13
     array[11][14].addNeighbor(&array[7][12]);
     array[11][14].addNeighbor(&array[14][11]);
     
     // Node 14
-    array[11][16].addNeighbor(&array[7][12]);
-    array[11][16].addNeighbor(&array[14][11]);
+    array[11][15].addNeighbor(&array[7][12]);
+    array[11][15].addNeighbor(&array[14][11]);
     
     // Node 15
     array[14][11].addNeighbor(&array[11][14]);
-    array[14][11].addNeighbor(&array[11][16]);
-    array[14][11].addNeighbor(&array[16][15]);
+    array[14][11].addNeighbor(&array[11][15]);
+    array[14][11].addNeighbor(&array[15][15]);
     
     // Node 16
-    array[16][15].addNeighbor(&array[14][11]);
+    array[15][15].addNeighbor(&array[14][11]);
 
 
 }
@@ -125,22 +124,22 @@ void activateNodes(Node **array)
 {
 
     // Saying that position 0,0 in the grid should activate as a node.
-    array[0][0].activateNode(); // 1 and are labeled on hand drawn sheet
-    array[0][3].activateNode(); // 2
-    array[3][0].activateNode(); // 3
-    array[3][3].activateNode(); // 4
-    array[2][8].activateNode(); // 5
-    array[0][13].activateNode(); // 6
-    array[5][8].activateNode(); // 7
-    array[7][6].activateNode(); // 8
-    array[8][3].activateNode(); // 9
-    array[12][5].activateNode(); // 10
-    array[10][9].activateNode(); // 11
-    array[7][12].activateNode(); // 12
-    array[11][14].activateNode(); // 13
-    array[11][16].activateNode(); // 14
-    array[14][11].activateNode(); // 15
-    array[16][15].activateNode(); // 16
+    array[0][0].activateNode(0,0); // 1 and are labeled on hand drawn sheet
+    array[0][3].activateNode(0,3); // 2
+    array[3][0].activateNode(3,0); // 3
+    array[3][3].activateNode(3,3); // 4
+    array[2][8].activateNode(2,8); // 5
+    array[0][13].activateNode(0,13); // 6
+    array[5][8].activateNode(5,8); // 7
+    array[7][6].activateNode(7,6); // 8
+    array[8][3].activateNode(8,3); // 9
+    array[12][5].activateNode(12,5); // 10
+    array[10][9].activateNode(10,9); // 11
+    array[7][12].activateNode(7,12); // 12
+    array[11][14].activateNode(11,14); // 13
+    array[11][15].activateNode(11,15); // 14
+    array[14][11].activateNode(14,11); // 15
+    array[15][15].activateNode(15,15); // 16
 
 }
 
@@ -179,6 +178,8 @@ int main()
 
     // Give neighbors to each active node
     setNeighbors(nodeGrid);
+
+    nodeGrid[0][0].deliverPackage(&nodeGrid[15][15]);
 
     // Based on how many nodes are selected create nodes in the grid
     // To keep the nodes far enough and spread out, break the grid into quadrants

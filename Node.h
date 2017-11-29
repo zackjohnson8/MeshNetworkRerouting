@@ -3,6 +3,9 @@
 
 #include <string>
 #include <vector>
+#include <cstdlib>
+#include <iostream>
+#include <fstream>
 
 class Node
 {
@@ -14,14 +17,17 @@ public:
     ~Node();
     std::string printNodeFile();
     std::string printNodeScreen();
-    void activateNode();
+    void activateNode(int, int);
     bool isActive();
     void addNeighbor(Node*);
     int getNeighborCount();
+    void deliverPackage(Node*);
 
 private:
 
     bool activeNode;
+    int posX;
+    int posY;
     std::vector<Node*> neighborStructs;
 
 };
