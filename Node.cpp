@@ -3,7 +3,7 @@
 
 #include "Node.h"
 
-// CONSTRUCTOR/DESTRUCTOR 
+// CONSTRUCTOR/DESTRUCTOR
 
 Node::Node()
 {
@@ -11,6 +11,7 @@ Node::Node()
     activeNode = false;
     posX = -1;
     posY = -1;
+    weight = 999;
 
 }
 
@@ -36,8 +37,25 @@ bool Node::isActive()
 
 }
 
-void Node::addNeighbor(Node* newNeighbor)
+void Node::addNeighbor(Node* p_Neighbor)
 {
+    int distanceX = p_Neighbor->posX - posX;
+    int distanceY = p_Neighbor->posY - posY;
+
+    if(distanceX < 0)
+    {
+      distanceX *= -1;
+    }
+
+    if(distanceY < 0)
+    {
+      distanceY *= -1;
+    }
+
+    // Set up new Neighbor and fill data
+    Neighbor* newNeighbor = new Neighbor();
+    newNeighbor->node = p_Neighbor;
+    newNeighbor->weightBetween = distanceX + distanceY;
 
     neighborStructs.push_back(newNeighbor);
 
@@ -50,13 +68,52 @@ int Node::getNeighborCount()
 
 }
 
-void Node::deliverPackage(Node* destNode)
+void Node::startPackageDelivery(Node* destNode)
 {
 
+    // Package is received
     std::cout << "Received package at postion (" << posX << ", " << posY << ")" << std::endl;
+
+    //  Build a package with both start node, destination node,
+    Package* newPackage = new Package();
+    newPackage->startNode = this;
+    newPackage->destNode = destNode;
+
+    // starting node always has a weight of 0
+    weight = 0;
+
+    // packageHandler
+    packageHandler(newPackage);
 
 }
 
+void Node::packageHandler(Package* p_Package)
+{
+
+    // Set each neighbors weight
+    for(int x = 0; x < neighborStructs->size(); x++)
+    {
+        if(neighborStructs[x]->node->getWeight() > neighborStructs[x]->weightBetween)
+        {
+          neighborStructs[x]->node->setWeight(neighborStructs[x]->weightBetween + weight);
+        }
+    }
+
+}
+
+void Node::setWeight(int value)
+{
+
+    weight = value;
+
+}
+
+int Node::getWeight()
+{
+
+    return weight;
+
+}
 
 std::string Node::printNodeScreen()
 {
@@ -90,4 +147,3 @@ std::string Node::printNodeFile()
 }
 
 #endif
-

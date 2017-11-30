@@ -179,7 +179,8 @@ int main()
     // Give neighbors to each active node
     setNeighbors(nodeGrid);
 
-    nodeGrid[0][0].deliverPackage(&nodeGrid[15][15]);
+    // Start a packet delivery
+    nodeGrid[0][0].startPackageDelivery(&nodeGrid[15][15]);
 
     // Based on how many nodes are selected create nodes in the grid
     // To keep the nodes far enough and spread out, break the grid into quadrants

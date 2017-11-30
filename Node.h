@@ -10,6 +10,21 @@
 class Node
 {
 
+struct Package{
+
+    Node* startNode;
+    Node* destNode;
+    std::vector<Node*> vistedNodes;
+
+};
+
+struct Neighbor{
+
+    Node* node;
+    int weightBetween;
+
+};
+
 public:
 
     // constructor/destructor
@@ -21,14 +36,19 @@ public:
     bool isActive();
     void addNeighbor(Node*);
     int getNeighborCount();
-    void deliverPackage(Node*);
+    void startPackageDelivery(Node*);
+    void setWeight(int);
+    int getWeight();
 
 private:
+
+    void packageHandler(Package*);
 
     bool activeNode;
     int posX;
     int posY;
-    std::vector<Node*> neighborStructs;
+    int weight;
+    std::vector<Neighbor*> neighborStructs;
 
 };
 
