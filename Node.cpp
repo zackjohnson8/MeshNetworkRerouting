@@ -87,18 +87,117 @@ void Node::packageHandler(Package* p_Package)
 {
 
     // Populate Dijkstra's Table
-    std::vector<Dijkstra>* v;
-    dijkstraHandler(v, 0);
+    std::vector<Dijkstra*> v;
+    std::vector<Node*> visited;
+    dijkstraHandler(v, 0, visited);
 
 
 
 }
 
-void Node::dijkstraHandler(std::vector<Dijkstra>* container, int currentWeight)
+bool Node::checkContainer(std::vector<Dijkstra*> pContainer, Node* pNode)
 {
 
-  // Who has the shortest path from this node to which neighbor
+  for(unsigned int x = 0; x < pContainer.size(); x++)
+  {
 
+    if(pContainer[x]->toNode == pNode)
+    {
+
+      return true;
+
+    }
+
+  }
+
+  return false;
+
+}
+
+bool Node::wasVisited(std::vector<Node*> pContainer, Node* pNode)
+{
+  for(unsigned int x = 0; x < pContainer.size(); x++)
+  {
+
+    if(pContainer[x] == pNode)
+    {
+      return true;
+    }
+  }
+
+  return false;
+
+}
+
+void Node::dijkstraHandler(std::vector<Dijkstra*> container, int currentWeight, std::vector<Node*> visited)
+{
+  visited.push_back(this);
+  Dijkstra* newDijkstra = NULL;
+
+  // Create new dijkstra structs based on the neighbors
+  for(unsigned int x = 0; x < neighborStructs.size(); x++)
+  {
+
+    // for each neighbor check if they are in the container
+    if(!checkContainer(container, neighborStructs[x]->node) && !wasVisited(visited, neighborStructs[x]->node))
+    {
+      // if it isn't in the container you should add it
+      newDijkstra = new Dijkstra();
+      newDijkstra->toNode = neighborStructs[x]->node;
+      newDijkstra->fromNode = this;
+      newDijkstra->weight = neighborStructs[x]->weightBetween;
+
+      container.push_back(newDijkstra);
+
+      std::cout << "Pushed on new node" << std::endl;
+
+    }
+
+  }
+
+  // Update container to have corrected weights for each neighbor
+  for(unsigned int x = 0; x < neighborStructs.size(); x++)
+  {
+    // Each neighbor is now for sure in the container of dijkstra
+    // for each of the neighbors go through the container and change info
+    for(unsigned int y = 0; y < container.size(); y ++)
+    {
+        // for neighbor x is this his data y?
+        if(neighborStructs[x]->node == container[y]->toNode)
+        {
+          // if the current weight + weight between is less than that nodes weight then replace
+          if(neighborStructs[x]->weightBetween + currentWeight < container[y]->weight && !wasVisited(visited, neighborStructs[x]->node))
+          {
+            container[y]->weight = neighborStructs[x]->weightBetween + currentWeight;
+            std::cout << "Replaced a weight" << std::endl;
+          }
+        }
+    }
+  }
+
+  // Pick the correct neighbor to traverse to
+  // For each neighbor
+  int lowestWeight = 999;
+  Node* passToNode = NULL;
+  for(unsigned int x = 0; x < neighborStructs.size(); x++)
+  {
+    // For each container value
+    for(unsigned int y = 0; y < container.size(); y ++)
+    {
+        // if this container item is the neighbor structs data
+        // check if this is the lowest path
+        if(neighborStructs[x]->node == container[y]->toNode && !wasVisited(visited, neighborStructs[x]->node))
+        {
+          if(container[y]->weight < lowestWeight)
+          {
+              lowestWeight = container[y]->weight;
+              passToNode = container[y]->toNode;
+          }
+        }
+    }
+  }
+
+  passToNode->dijkstraHandler(container, lowestWeight, visited);
 
 /*
   Dijkstra* newDijkstra;
