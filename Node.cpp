@@ -131,8 +131,12 @@ bool Node::wasVisited(std::vector<Node*> pContainer, Node* pNode)
 
 void Node::dijkstraHandler(std::vector<Dijkstra*> container, int currentWeight, std::vector<Node*> visited)
 {
+
+  std::cout << "Jumped to (" << posX << ", " << posY << ")" << std::endl;
   visited.push_back(this);
   Dijkstra* newDijkstra = NULL;
+  // Possible updated routes
+  std::vector<Dijkstra*> holdPossibleRoutes;
 
   // Create new dijkstra structs based on the neighbors
   for(unsigned int x = 0; x < neighborStructs.size(); x++)
@@ -148,6 +152,9 @@ void Node::dijkstraHandler(std::vector<Dijkstra*> container, int currentWeight, 
       newDijkstra->weight = neighborStructs[x]->weightBetween;
 
       container.push_back(newDijkstra);
+
+      // since I just added this node it is a holdPossibleRoutes
+      holdPossibleRoutes.push_back(newDijkstra);
 
       std::cout << "Pushed on new node" << std::endl;
 
@@ -170,34 +177,33 @@ void Node::dijkstraHandler(std::vector<Dijkstra*> container, int currentWeight, 
           {
             container[y]->weight = neighborStructs[x]->weightBetween + currentWeight;
             std::cout << "Replaced a weight" << std::endl;
+
+            // since it was modified it is also a possible route
+            holdPossibleRoutes.push_back(container[y]);
+
           }
         }
     }
   }
 
-  // Pick the correct neighbor to traverse to
-  // For each neighbor
+  // based on the possible routes pick the correct one
   int lowestWeight = 999;
   Node* passToNode = NULL;
-  for(unsigned int x = 0; x < neighborStructs.size(); x++)
+  for(unsigned int x = 0; x < holdPossibleRoutes.size(); x++)
   {
-    // For each container value
-    for(unsigned int y = 0; y < container.size(); y ++)
+
+    if(holdPossibleRoutes[x]->weight < lowestWeight)
     {
-        // if this container item is the neighbor structs data
-        // check if this is the lowest path
-        if(neighborStructs[x]->node == container[y]->toNode && !wasVisited(visited, neighborStructs[x]->node))
-        {
-          if(container[y]->weight < lowestWeight)
-          {
-              lowestWeight = container[y]->weight;
-              passToNode = container[y]->toNode;
-          }
-        }
+        lowestWeight = holdPossibleRoutes[x]->weight;
+        passToNode = holdPossibleRoutes[x]->toNode;
     }
+
   }
 
-  passToNode->dijkstraHandler(container, lowestWeight, visited);
+  if(passToNode != NULL)
+  {
+    passToNode->dijkstraHandler(container, lowestWeight, visited);
+  }
 
 /*
   Dijkstra* newDijkstra;
