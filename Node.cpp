@@ -97,6 +97,10 @@ void Node::packageHandler(Package* p_Package)
 void Node::dijkstraHandler(std::vector<Dijkstra>* container, int currentWeight)
 {
 
+  // Who has the shortest path from this node to which neighbor
+
+
+/*
   Dijkstra* newDijkstra;
   int lowestWeight = 999;
 
@@ -131,56 +135,7 @@ void Node::dijkstraHandler(std::vector<Dijkstra>* container, int currentWeight)
 
   }
 
-
-
-}
-
-Node* Node::findLowestWeightNode(std::vector<Dijkstra>* container)
-{
-
-  Node* holdNode = container[0]->toNode;
-  int currentWeight = container[0]->weight;
-  for(int x = 1; x < container.size(); x++)
-  {
-
-    if(container[x]->weight < currentWeight)
-    {
-
-      // switch hold node and currentWeight data
-      holdNode = container[x]->toNode;
-      currentWeight = container[x]->weight;
-
-    }
-
-  }
-
-  return holdNode;
-
-}
-
-bool Node::compareNeighbors(Node* one, Node* two)
-{
-
-  if(one == two)
-  {
-    return true;
-  }
-
-  return false;
-
-}
-
-void Node::setWeight(int value)
-{
-
-    weight = value;
-
-}
-
-int Node::getWeight()
-{
-
-    return weight;
+*/
 
 }
 

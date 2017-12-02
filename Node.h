@@ -46,15 +46,11 @@ public:
     void addNeighbor(Node*);
     int getNeighborCount();
     void startPackageDelivery(Node*);
-    void setWeight(int);
-    int getWeight();
 
 private:
 
     void packageHandler(Package*);
     void dijkstraHandler(std::vector<Dijkstra>*, int);
-    bool compareNeighbors(Neighbor*, Neighbor*);
-    Node* findLowestWeightNode(std::vector<Dijkstra>*);
 
     bool activeNode;
     int posX;
