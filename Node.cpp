@@ -11,7 +11,6 @@ Node::Node()
     activeNode = false;
     posX = -1;
     posY = -1;
-
 }
 
 Node::~Node()
@@ -86,11 +85,62 @@ void Node::startPackageDelivery(Node* destNode)
 void Node::packageHandler(Package* p_Package)
 {
 
-    // Populate Dijkstra's Table
+    // Run dijkstra to find the correct path for the package
     std::vector<Dijkstra*> v;
     std::vector<Node*> visited;
     dijkstraHandler(v, 0, visited, p_Package->destNode);
 
+    // Send to destination
+    if(pathToDestination[pathToDestination.size()-1] == p_Package->destNode)
+    {
+      sendPackageToDestination(p_Package, pathToDestination, this, p_Package->destNode);
+    }else
+    { // ERROR TODO
+      std::cout << "Trouble reaching destination and cannot deliver package" << std::endl;
+    }
+
+}
+
+void Node::sendPackageToDestination(Package* p_Package, std::vector<Node*> visited, Node* startNode, Node* destNode)
+{
+  std::cout << "Enter SendPackageToDestination" << std::endl;
+  std::vector<Node*> holdNode;
+  if(this == destNode)
+  {
+
+    std::cout << "Delivery Success" << std::endl;
+
+  }else
+  {
+
+    // If the next node is still active pass along the correct path else you'll need to run MST
+    if(visited[1].isActive())
+    {
+      // can't pop top so I'll just make a new one
+      for(unsigned int x = 1; x < visited.size(); x++)
+      {
+
+        holdNode.push_back(visited[x]);
+
+      }
+      std::cout << "Made it" << std::endl;
+      visited[1]->sendPackageToDestination(p_Package, holdNode, startNode, destNode);
+
+    }else // Else correct the pathToDestination with MST and begin sending again
+    {
+
+      // Using MST Prim's version
+      MST();
+
+    }
+  }
+
+}
+
+void Node::MST()
+{
+
+  // Send a message to my neighbors asking who is closest
 
 
 }
@@ -204,46 +254,49 @@ void Node::dijkstraHandler(std::vector<Dijkstra*> container, int currentWeight, 
   {
 
     // we are complete and need to head back with all the new info
-    sendBackToStart(visited);
+    sendBackToStart(visited, visited.size()-1);
 
-  }
-
-  if(passToNode != NULL)
-  {
-    passToNode->dijkstraHandler(container, lowestWeight, visited, destNode);
   }else
   {
-
-    // else we need to backtrack to choose a different path
-    // Check the container for another from to
-    for(unsigned int x = 0; x < container.size(); x++)
+    if(passToNode != NULL)
     {
-        // find a from that doesn't go to this
-        if(container[x]->fromNode == visited[visited.size()-2] && container[x]->toNode != this)
-        {
+      passToNode->dijkstraHandler(container, lowestWeight, visited, destNode);
+    }else
+    {
 
-          // send to new found node
-          visited.pop_back();
-          container[x]->toNode->dijkstraHandler(container, currentWeight, visited, destNode);
+      // else we need to backtrack to choose a different path
+      // Check the container for another from to
+      for(unsigned int x = 0; x < container.size(); x++)
+      {
+          // find a from that doesn't go to this
+          if(container[x]->fromNode == visited[visited.size()-2] && container[x]->toNode != this)
+          {
 
-        }
+            // send to new found node
+            visited.pop_back();
+            container[x]->toNode->dijkstraHandler(container, currentWeight, visited, destNode);
+
+          }
+      }
+
     }
-
   }
 
 }
 
 void Node::sendBackToStart(std::vector<Node*> visited, int position)
 {
-
-  std::cout << "SEND BACK TO START" << std::endl;
-  for(unsigned int x = 0; x < visited.size(); x++)
+  std::cout << "Send collected information back to package node" << std::endl;
+  if(this != visited[0])
   {
-
-    std::cout << "Visited (" << visited[x]->posX << ", " << visited[x]->posY << ")" << std::endl;
-
+    visited[position-1]->sendBackToStart(visited, position-1);
+  }else
+  {
+    for(unsigned int x = 0; x < visited.size(); x++)
+    {
+      pathToDestination.push_back(visited[x]);
+    }
   }
-
 }
 
 std::string Node::printNodeScreen()

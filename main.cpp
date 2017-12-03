@@ -69,28 +69,28 @@ void setNeighbors(Node **array)
     array[2][8].addNeighbor(&array[0][3]);
     array[2][8].addNeighbor(&array[5][8]);
     array[2][8].addNeighbor(&array[0][13]);
-    
+
     // Node 6
     array[0][13].addNeighbor(&array[2][8]);
 
-    // Node 7 
+    // Node 7
     array[5][8].addNeighbor(&array[2][8]);
     array[5][8].addNeighbor(&array[7][6]);
-    
+
     // Node 8
     array[7][6].addNeighbor(&array[5][8]);
     array[7][6].addNeighbor(&array[8][3]);
     array[7][6].addNeighbor(&array[10][9]);
-    
+
     // Node 9
     array[8][3].addNeighbor(&array[3][3]);
     array[8][3].addNeighbor(&array[7][6]);
     array[8][3].addNeighbor(&array[12][5]);
-    
+
     // Node 10
     array[12][5].addNeighbor(&array[8][3]);
     array[12][5].addNeighbor(&array[10][9]);
-    
+
     // Node 11
     array[10][9].addNeighbor(&array[7][6]);
     array[10][9].addNeighbor(&array[12][5]);
@@ -100,20 +100,20 @@ void setNeighbors(Node **array)
     array[7][12].addNeighbor(&array[10][9]);
     array[7][12].addNeighbor(&array[11][14]);
     array[7][12].addNeighbor(&array[11][15]);
-    
+
     // Node 13
     array[11][14].addNeighbor(&array[7][12]);
     array[11][14].addNeighbor(&array[14][11]);
-    
+
     // Node 14
     array[11][15].addNeighbor(&array[7][12]);
     array[11][15].addNeighbor(&array[14][11]);
-    
+
     // Node 15
     array[14][11].addNeighbor(&array[11][14]);
     array[14][11].addNeighbor(&array[11][15]);
     array[14][11].addNeighbor(&array[15][15]);
-    
+
     // Node 16
     array[15][15].addNeighbor(&array[14][11]);
 
@@ -162,7 +162,7 @@ int main()
 
     }
 
-    // 2D Pointer Array Implementation Below 
+    // 2D Pointer Array Implementation Below
     Node** nodeGrid;
     nodeGrid = new Node *[nodeTotal];
 
@@ -198,6 +198,3 @@ int main()
     - Build the graph based on default 80 character long width
 
 */
-
-
-

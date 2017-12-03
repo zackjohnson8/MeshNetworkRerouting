@@ -53,12 +53,15 @@ private:
     void dijkstraHandler(std::vector<Dijkstra*>, int, std::vector<Node*>, Node*);
     bool checkContainer(std::vector<Dijkstra*>, Node*);
     bool wasVisited(std::vector<Node*>, Node*);
-    void sendBackToStart(std::vector<Node*>);
+    void sendBackToStart(std::vector<Node*>, int);
+    void sendPackageToDestination(Package*, std::vector<Node*>, Node*, Node*);
+    void MST();
 
     bool activeNode;
     int posX;
     int posY;
     std::vector<Neighbor*> neighborStructs;
+    std::vector<Node*> pathToDestination;
 
 };
 
