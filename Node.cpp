@@ -123,7 +123,6 @@ void Node::sendPackageToDestination(Package* p_Package, std::vector<Node*> visit
         holdNode.push_back(visited[x]);
 
       }
-      std::cout << "Made it" << std::endl;
       visited[1]->sendPackageToDestination(p_Package, holdNode, startNode, destNode);
 
     }else // Else correct the pathToDestination with MST and begin sending again
