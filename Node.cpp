@@ -114,7 +114,7 @@ void Node::sendPackageToDestination(Package* p_Package, std::vector<Node*> visit
   {
 
     // If the next node is still active pass along the correct path else you'll need to run MST
-    if(visited[1].isActive())
+    if(visited[1]->isActive())
     {
       // can't pop top so I'll just make a new one
       for(unsigned int x = 1; x < visited.size(); x++)
