@@ -89,7 +89,7 @@ void Node::packageHandler(Package* p_Package)
     // Populate Dijkstra's Table
     std::vector<Dijkstra*> v;
     std::vector<Node*> visited;
-    dijkstraHandler(v, 0, visited);
+    dijkstraHandler(v, 0, visited, p_Package->destNode);
 
 
 
@@ -129,7 +129,7 @@ bool Node::wasVisited(std::vector<Node*> pContainer, Node* pNode)
 
 }
 
-void Node::dijkstraHandler(std::vector<Dijkstra*> container, int currentWeight, std::vector<Node*> visited)
+void Node::dijkstraHandler(std::vector<Dijkstra*> container, int currentWeight, std::vector<Node*> visited, Node* destNode)
 {
 
   std::cout << "Jumped to (" << posX << ", " << posY << ")" << std::endl;
@@ -200,47 +200,49 @@ void Node::dijkstraHandler(std::vector<Dijkstra*> container, int currentWeight, 
 
   }
 
+  if(visited[visited.size()-1] == destNode)
+  {
+
+    // we are complete and need to head back with all the new info
+    sendBackToStart(visited);
+
+  }
+
   if(passToNode != NULL)
   {
-    passToNode->dijkstraHandler(container, lowestWeight, visited);
-  }
-
-/*
-  Dijkstra* newDijkstra;
-  int lowestWeight = 999;
-
-  // Base case 0 things in Dijkstra graph
-  if(container->size() == 0)
+    passToNode->dijkstraHandler(container, lowestWeight, visited, destNode);
+  }else
   {
-    std::cout << "Base Case:" << std::endl;
 
-    // add all neighbors
-    for(unsigned int x = 0; x < neighborStructs.size(); x++)
+    // else we need to backtrack to choose a different path
+    // Check the container for another from to
+    for(unsigned int x = 0; x < container.size(); x++)
     {
-      std::cout << "Add new neighbor," << std::endl;
+        // find a from that doesn't go to this
+        if(container[x]->fromNode == visited[visited.size()-2] && container[x]->toNode != this)
+        {
 
-      // add neighbor x into the container
-      newDijkstra = new Dijkstra();
-      newDijkstra->toNode = neighborStructs[x].node;
-      newDijkstra->fromNode = this;
-      newDijkstra->weight = neighborStructs[x].weightBetween;
-      container.push_back(newDijkstra)
+          // send to new found node
+          visited.pop_back();
+          container[x]->toNode->dijkstraHandler(container, currentWeight, visited, destNode);
 
-      if(newDijkstra->weight < lowestWeight)
-      {
-        lowestWeight = newDijkstra->weight;
-      }
-
+        }
     }
 
-    // Check the container and choose the lowest path
-    std::cout << "All neighbors added, lowest weight chosen: " << lowestWeight << std::endl;
-    findLowestWeightNode()->dijkstraHandler(container, lowestWeight + currentWeight);
-
-
   }
 
-*/
+}
+
+void Node::sendBackToStart(std::vector<Node*> visited, int position)
+{
+
+  std::cout << "SEND BACK TO START" << std::endl;
+  for(unsigned int x = 0; x < visited.size(); x++)
+  {
+
+    std::cout << "Visited (" << visited[x]->posX << ", " << visited[x]->posY << ")" << std::endl;
+
+  }
 
 }
 

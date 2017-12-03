@@ -50,9 +50,10 @@ public:
 private:
 
     void packageHandler(Package*);
-    void dijkstraHandler(std::vector<Dijkstra*>, int, std::vector<Node*>);
+    void dijkstraHandler(std::vector<Dijkstra*>, int, std::vector<Node*>, Node*);
     bool checkContainer(std::vector<Dijkstra*>, Node*);
     bool wasVisited(std::vector<Node*>, Node*);
+    void sendBackToStart(std::vector<Node*>);
 
     bool activeNode;
     int posX;
