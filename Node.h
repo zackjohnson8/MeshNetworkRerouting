@@ -38,6 +38,7 @@ struct MST
 {
 
   Node* toNode;
+  Node* fromNode;
   bool visited;
 
 };
@@ -64,7 +65,7 @@ private:
     void sendBackToStart(std::vector<Node*>, int);
     void sendPackageToDestination(Package*, std::vector<Node*>, Node*, Node*);
     void MSTHandler(std::vector<MST*>);
-    bool checkContainerNode(std::vector<Node*>, Node*);
+    bool checkContainerMST(std::vector<MST*>, Node*);
 
     bool activeNode;
     int posX;
