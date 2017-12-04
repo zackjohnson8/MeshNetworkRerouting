@@ -93,6 +93,10 @@ void Node::packageHandler(Package* p_Package)
     // Send to destination
     if(pathToDestination[pathToDestination.size()-1] == p_Package->destNode)
     {
+
+      // TEST with broken path
+      pathToDestination[pathToDestination.size()-3]->setActive(false);
+
       sendPackageToDestination(p_Package, pathToDestination, this, p_Package->destNode);
     }else
     { // ERROR TODO
@@ -130,7 +134,7 @@ void Node::sendPackageToDestination(Package* p_Package, std::vector<Node*> visit
 
       // Using MST Prim's version
       std::vector<MST*> v;
-      MSTHandler(v);
+      MSTHandler(v, destNode);
 
     }
   }
@@ -152,7 +156,7 @@ bool Node::checkContainerMST(std::vector<MST*> container, Node* pNode)
 
 }
 
-void Node::MSTHandler(std::vector<MST*> pathOptions)
+void Node::MSTHandler(std::vector<MST*> pathOptions, Node* destNode)
 {
 
   MST* holdNode = NULL;
@@ -166,25 +170,61 @@ void Node::MSTHandler(std::vector<MST*> pathOptions)
     holdNode->toNode = this;
     holdNode->fromNode = this;
     holdNode->visited = true;
+    holdNode->weight = 0;
     pathOptions.push_back(holdNode);
 
   }
 
   for(unsigned int x = 0; x < neighborStructs.size(); x++)
   {
-    // for each neighbor check if they are in the container // && !wasVisited(visited, neighborStructs[x]->node)
-    if(!checkContainerMST(pathOptions, neighborStructs[x]->node))
+
+    if(neighborStructs[x]->node == destNode)
     {
+
+      std::cout << "Using MST found the correct path and need to begin transmission of package again" << std::endl;
+
+    }
+
+    // for each neighbor check if they are in the container // && !wasVisited(visited, neighborStructs[x]->node)
+    if(!checkContainerMST(pathOptions, neighborStructs[x]->node) && neighborStructs[x]->node->isActive())
+    {
+      std::cout << "added(" << neighborStructs[x]->node->posX << ", " << neighborStructs[x]->node->posY << ")" << std::endl;
       // Add this path to our pathOptions
       holdNode = new MST();
       holdNode->toNode = neighborStructs[x]->node;
       holdNode->fromNode = this;
       holdNode->visited = false;
+      holdNode->weight = neighborStructs[x]->weightBetween;
+
+      pathOptions.push_back(holdNode);
     }
 
   }
 
-  std::cout << "MST path has grown 1 larger" << std::endl;
+  // Check all paths that have not been traveled to yet and decide who is the best
+  for(unsigned int x = 0; x < pathOptions.size(); x++)
+  {
+    if(pathOptions[x]->weight < holdWeight && !pathOptions[x]->visited)
+    {
+      std::cout << "picking path(" << pathOptions[x]->toNode->posX << ", " << pathOptions[x]->toNode->posY << ")" << std::endl;
+      holdNode = pathOptions[x];
+      holdWeight = pathOptions[x]->weight;
+
+    }
+
+  }
+
+  std::cout << "MST has selected a new path to check out which is (" << holdNode->toNode->posX << ", " << holdNode->toNode->posY << ")" << std::endl;
+  // go to the node that has been selected
+  holdNode->visited = true;
+  holdNode->toNode->MSTHandler(pathOptions, destNode);
+
+}
+
+void Node::setActive(bool p)
+{
+
+  activeNode = p;
 
 }
 

@@ -39,6 +39,7 @@ struct MST
 
   Node* toNode;
   Node* fromNode;
+  int weight;
   bool visited;
 
 };
@@ -52,6 +53,7 @@ public:
     std::string printNodeScreen();
     void activateNode(int, int);
     bool isActive();
+    void setActive(bool);
     void addNeighbor(Node*);
     int getNeighborCount();
     void startPackageDelivery(Node*);
@@ -64,7 +66,7 @@ private:
     bool wasVisited(std::vector<Node*>, Node*);
     void sendBackToStart(std::vector<Node*>, int);
     void sendPackageToDestination(Package*, std::vector<Node*>, Node*, Node*);
-    void MSTHandler(std::vector<MST*>);
+    void MSTHandler(std::vector<MST*>, Node*);
     bool checkContainerMST(std::vector<MST*>, Node*);
 
     bool activeNode;
