@@ -34,6 +34,14 @@ struct Dijkstra
 
 };
 
+struct MST
+{
+
+  Node* toNode;
+  bool visited;
+
+};
+
 public:
 
     // constructor/destructor
@@ -55,7 +63,8 @@ private:
     bool wasVisited(std::vector<Node*>, Node*);
     void sendBackToStart(std::vector<Node*>, int);
     void sendPackageToDestination(Package*, std::vector<Node*>, Node*, Node*);
-    void MST();
+    void MSTHandler(std::vector<MST*>);
+    bool checkContainerNode(std::vector<Node*>, Node*);
 
     bool activeNode;
     int posX;

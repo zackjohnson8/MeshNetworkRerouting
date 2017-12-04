@@ -129,17 +129,64 @@ void Node::sendPackageToDestination(Package* p_Package, std::vector<Node*> visit
     {
 
       // Using MST Prim's version
-      MST();
+      std::vector<Node*> v;
+      MSTHandler(v);
 
     }
   }
 
 }
 
-void Node::MST()
+bool checkContainerNode(std::vector<Node*> container, Node* pNode)
 {
 
-  // Send a message to my neighbors asking who is closest
+  for(unsigned int x = 0; x < container.size(); x++)
+  {
+    if(container[x] == pNode)
+    {
+        return true;
+    }
+  }
+
+  return false;
+
+}
+
+void Node::MSTHandler(std::vector<Node*> pathOptions)
+{
+
+  Node* holdNode = NULL;
+  int holdWeight = 999;
+
+  for(unsigned int x = 0; x < neighborStructs.size(); x++)
+  {
+
+    // for each neighbor check if they are in the container // && !wasVisited(visited, neighborStructs[x]->node)
+    if(!checkContainerNode(pathOptions, neighborStructs[x]->node))
+    {
+
+    }
+
+  }
+
+  // Path option is the neighbor with the lowest path
+  for(unsigned int x = 0; x < neighborStructs.size(); x++)
+  {
+
+    if(neighborStructs[x]->weightBetween < holdWeight)
+    {
+
+      holdNode = neighborStructs[x]->node;
+      holdWeight = neighborStructs[x]->weightBetween;
+
+    }
+
+  }
+
+    std::cout << "MST path has grown 1 larger" << std::endl;
+
+  }
+
 
 
 }
