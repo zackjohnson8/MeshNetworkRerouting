@@ -95,7 +95,7 @@ void Node::packageHandler(Package* p_Package)
     {
 
       // TEST with broken path
-      pathToDestination[pathToDestination.size()-3]->setActive(false);
+      pathToDestination[pathToDestination.size()-7]->setActive(false);
 
       sendPackageToDestination(p_Package, pathToDestination, this, p_Package->destNode);
     }else
@@ -182,7 +182,7 @@ void Node::MSTHandler(std::vector<MST*> pathOptions, Node* destNode)
     {
 
       std::cout << "Using MST found the correct path and need to begin transmission of package again" << std::endl;
-
+      return;
     }
 
     // for each neighbor check if they are in the container // && !wasVisited(visited, neighborStructs[x]->node)
