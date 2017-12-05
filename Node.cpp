@@ -85,6 +85,8 @@ void Node::startPackageDelivery(Node* destNode)
 void Node::packageHandler(Package* p_Package)
 {
 
+    srand(time(NULL));
+
     // Run dijkstra to find the correct path for the package
     std::vector<Dijkstra*> v;
     std::vector<Node*> visited;
@@ -95,8 +97,9 @@ void Node::packageHandler(Package* p_Package)
     {
 
       // TEST with broken path
-      pathToDestination[pathToDestination.size()-7]->setActive(false);
 
+      pathToDestination[pathToDestination.size()-(rand()%(pathToDestination.size()-1)+1)]->setActive(false);
+      std::cout << "Begin delivery of package to destination" << std::endl << std::endl;
       sendPackageToDestination(p_Package, pathToDestination, this, p_Package->destNode);
     }else
     { // ERROR TODO
@@ -107,7 +110,7 @@ void Node::packageHandler(Package* p_Package)
 
 void Node::sendPackageToDestination(Package* p_Package, std::vector<Node*> visited, Node* startNode, Node* destNode)
 {
-  std::cout << "Enter SendPackageToDestination" << std::endl;
+  //std::cout << "Enter SendPackageToDestination" << std::endl;
   std::vector<Node*> holdNode;
   if(this == destNode)
   {
@@ -133,8 +136,9 @@ void Node::sendPackageToDestination(Package* p_Package, std::vector<Node*> visit
     {
 
       // Using MST Prim's version
+      std::cout << "No response from next path node (" << visited[1]->posX << ", " << visited[1]->posY << ")" "... repair the path using MST" << std::endl;
       std::vector<MST*> v;
-      MSTHandler(v, destNode);
+      MSTHandler(v, this, destNode);
 
     }
   }
@@ -156,8 +160,10 @@ bool Node::checkContainerMST(std::vector<MST*> container, Node* pNode)
 
 }
 
-void Node::MSTHandler(std::vector<MST*> pathOptions, Node* destNode)
+void Node::MSTHandler(std::vector<MST*> pathOptions, Node* startNode, Node* destNode)
 {
+
+
 
   MST* holdNode = NULL;
   int holdWeight = 999;
@@ -180,15 +186,31 @@ void Node::MSTHandler(std::vector<MST*> pathOptions, Node* destNode)
 
     if(neighborStructs[x]->node == destNode)
     {
+      if(neighborStructs[x]->node->isActive())
+      {
+        std::cout << "Using MST found the correct path and will continue delivery" << std::endl;
+        /*pathToDestination.clear();
 
-      std::cout << "Using MST found the correct path and need to begin transmission of package again" << std::endl;
-      return;
+        int value = x;
+        while(neighborStructs[x] != startNode)
+        {
+          pathToDestination.push_back(neighborStructs[x]->node);
+        }
+        */
+        return;
+      }else
+      {
+
+        std::cout << "Seems like the destination node is no longer active... can't deliver to that node" << std::endl;
+        return;
+
+      }
     }
 
     // for each neighbor check if they are in the container // && !wasVisited(visited, neighborStructs[x]->node)
     if(!checkContainerMST(pathOptions, neighborStructs[x]->node) && neighborStructs[x]->node->isActive())
     {
-      std::cout << "added(" << neighborStructs[x]->node->posX << ", " << neighborStructs[x]->node->posY << ")" << std::endl;
+      //std::cout << "added(" << neighborStructs[x]->node->posX << ", " << neighborStructs[x]->node->posY << ")" << std::endl;
       // Add this path to our pathOptions
       holdNode = new MST();
       holdNode->toNode = neighborStructs[x]->node;
@@ -206,7 +228,7 @@ void Node::MSTHandler(std::vector<MST*> pathOptions, Node* destNode)
   {
     if(pathOptions[x]->weight < holdWeight && !pathOptions[x]->visited)
     {
-      std::cout << "picking path(" << pathOptions[x]->toNode->posX << ", " << pathOptions[x]->toNode->posY << ")" << std::endl;
+      //std::cout << "picking path(" << pathOptions[x]->toNode->posX << ", " << pathOptions[x]->toNode->posY << ")" << std::endl;
       holdNode = pathOptions[x];
       holdWeight = pathOptions[x]->weight;
 
@@ -214,10 +236,37 @@ void Node::MSTHandler(std::vector<MST*> pathOptions, Node* destNode)
 
   }
 
+  if(allVisited(pathOptions))
+  {
+
+    std::cout << "MST has checked all paths and failed to find any other way to the destination node" << std::endl;
+    return;
+
+  }
+
   std::cout << "MST has selected a new path to check out which is (" << holdNode->toNode->posX << ", " << holdNode->toNode->posY << ")" << std::endl;
   // go to the node that has been selected
   holdNode->visited = true;
-  holdNode->toNode->MSTHandler(pathOptions, destNode);
+  holdNode->toNode->MSTHandler(pathOptions, startNode, destNode);
+
+}
+
+bool Node::allVisited(std::vector<MST*> container)
+{
+
+  for(unsigned int x = 0; x < container.size(); x++)
+  {
+
+    if(container[x]->visited == false)
+    {
+
+      return false;
+
+    }
+
+  }
+
+  return true;
 
 }
 
@@ -265,7 +314,7 @@ bool Node::wasVisited(std::vector<Node*> pContainer, Node* pNode)
 void Node::dijkstraHandler(std::vector<Dijkstra*> container, int currentWeight, std::vector<Node*> visited, Node* destNode)
 {
 
-  std::cout << "Jumped to (" << posX << ", " << posY << ")" << std::endl;
+  std::cout << "Adding new information to Dijkstra graph at (" << posX << ", " << posY << ")" << std::endl;
   visited.push_back(this);
   Dijkstra* newDijkstra = NULL;
   // Possible updated routes
@@ -289,7 +338,7 @@ void Node::dijkstraHandler(std::vector<Dijkstra*> container, int currentWeight, 
       // since I just added this node it is a holdPossibleRoutes
       holdPossibleRoutes.push_back(newDijkstra);
 
-      std::cout << "Pushed on new node" << std::endl;
+      //std::cout << "Pushed on new node" << std::endl;
 
     }
 
@@ -337,6 +386,7 @@ void Node::dijkstraHandler(std::vector<Dijkstra*> container, int currentWeight, 
   {
 
     // we are complete and need to head back with all the new info
+    std::cout << "Return calculated Dijkstra information back to package start" << std::endl;
     sendBackToStart(visited, visited.size()-1);
 
   }else
@@ -369,7 +419,7 @@ void Node::dijkstraHandler(std::vector<Dijkstra*> container, int currentWeight, 
 
 void Node::sendBackToStart(std::vector<Node*> visited, int position)
 {
-  std::cout << "Send collected information back to package node" << std::endl;
+  //std::cout << "Send collected information back to package node" << std::endl;
   if(this != visited[0])
   {
     visited[position-1]->sendBackToStart(visited, position-1);

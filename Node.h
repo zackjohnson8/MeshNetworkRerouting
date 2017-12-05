@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
+#include <time.h>
 
 class Node
 {
@@ -66,8 +67,9 @@ private:
     bool wasVisited(std::vector<Node*>, Node*);
     void sendBackToStart(std::vector<Node*>, int);
     void sendPackageToDestination(Package*, std::vector<Node*>, Node*, Node*);
-    void MSTHandler(std::vector<MST*>, Node*);
+    void MSTHandler(std::vector<MST*>, Node*, Node*);
     bool checkContainerMST(std::vector<MST*>, Node*);
+    bool allVisited(std::vector<MST*>);
 
     bool activeNode;
     int posX;
