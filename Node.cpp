@@ -97,8 +97,10 @@ void Node::packageHandler(Package* p_Package)
     {
 
       // TEST with broken path
-
-      pathToDestination[pathToDestination.size()-(rand()%(pathToDestination.size()-1)+1)]->setActive(false);
+      if(rand()%5 != 0)
+      {
+        pathToDestination[pathToDestination.size()-(rand()%(pathToDestination.size()-1)+1)]->setActive(false);
+      }
       std::cout << "Begin delivery of package to destination" << std::endl << std::endl;
       sendPackageToDestination(p_Package, pathToDestination, this, p_Package->destNode);
     }else
@@ -188,7 +190,7 @@ void Node::MSTHandler(std::vector<MST*> pathOptions, Node* startNode, Node* dest
     {
       if(neighborStructs[x]->node->isActive())
       {
-        std::cout << "Using MST found the correct path and will continue delivery" << std::endl;
+        std::cout << "Found corrected path and finish delivery to (" << destNode->posX << ", " << destNode->posY << ")" << std::endl;
         /*pathToDestination.clear();
 
         int value = x;
