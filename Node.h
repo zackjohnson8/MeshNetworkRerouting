@@ -77,6 +77,8 @@ private:
     std::vector<Neighbor*> neighborStructs;
     std::vector<Node*> pathToDestination;
 
+    int passBackCount;
+
 };
 
 

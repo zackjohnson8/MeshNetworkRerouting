@@ -11,6 +11,7 @@ Node::Node()
     activeNode = false;
     posX = -1;
     posY = -1;
+    passBackCount = 1;
 }
 
 Node::~Node()
@@ -317,10 +318,38 @@ void Node::dijkstraHandler(std::vector<Dijkstra*> container, int currentWeight, 
 {
 
   std::cout << "Adding new information to Dijkstra graph at (" << posX << ", " << posY << ")" << std::endl;
-  visited.push_back(this);
+  bool check = true;
+  for(unsigned int x = 0; x < visited.size(); x++)
+  {
+    if(visited[x] == this)
+    {
+      check = false;
+    }
+  }
+  if(check)
+  {
+    visited.push_back(this);
+  }
   Dijkstra* newDijkstra = NULL;
   // Possible updated routes
   std::vector<Dijkstra*> holdPossibleRoutes;
+
+  // Check this nodes neighbors to see if there is the destination
+  for(unsigned int x = 0; x < neighborStructs.size(); x++)
+  {
+
+    if(neighborStructs[x]->node == destNode)
+    {
+
+      visited.push_back(neighborStructs[x]->node);
+      std::cout << "Return calculated Dijkstra information back to package start" << std::endl;
+      sendBackToStart(visited, visited.size()-1);
+      return;
+
+
+    }
+
+  }
 
   // Create new dijkstra structs based on the neighbors
   for(unsigned int x = 0; x < neighborStructs.size(); x++)
@@ -370,6 +399,8 @@ void Node::dijkstraHandler(std::vector<Dijkstra*> container, int currentWeight, 
     }
   }
 
+
+
   // based on the possible routes pick the correct one
   int lowestWeight = 999;
   Node* passToNode = NULL;
@@ -390,31 +421,53 @@ void Node::dijkstraHandler(std::vector<Dijkstra*> container, int currentWeight, 
     // we are complete and need to head back with all the new info
     std::cout << "Return calculated Dijkstra information back to package start" << std::endl;
     sendBackToStart(visited, visited.size()-1);
+    return;
 
   }else
   {
     if(passToNode != NULL)
     {
+      passBackCount = 2;
       passToNode->dijkstraHandler(container, lowestWeight, visited, destNode);
     }else
     {
-
-      // else we need to backtrack to choose a different path
-      // Check the container for another from to
-      for(unsigned int x = 0; x < container.size(); x++)
+      // is there a neighbor who hasn't been visited then?
+      for(unsigned int x = 0; x < neighborStructs.size(); x++)
       {
-          // find a from that doesn't go to this
-          if(container[x]->fromNode == visited[visited.size()-2] && container[x]->toNode != this)
-          {
 
-            // send to new found node
-            visited.pop_back();
-            container[x]->toNode->dijkstraHandler(container, currentWeight, visited, destNode);
+        if(!wasVisited(visited, neighborStructs[x]->node))
+        {
+          // try this path atleast
+          passToNode = neighborStructs[x]->node;
+          passBackCount = 2;
+          passToNode->dijkstraHandler(container, lowestWeight, visited, destNode);
+          return;
 
-          }
+        }
+
       }
 
-    }
+        passBackCount++;
+        visited[visited.size()-passBackCount]->dijkstraHandler(container, lowestWeight, visited, destNode);
+      }
+      // else we need to backtrack to choose a different path
+      // Check the container for another from to
+      //for(unsigned int x = 0; x < container.size(); x++)
+      //for(unsigned int x = visited.size()-2; x > -1; x--)
+      //{
+
+          // find a from that doesn't go to this
+          //if(container[x]->fromNode == visited[visited.size()-2] && container[x]->toNode != this)
+          //{
+
+            // send to new found node
+//            visited.pop_back();
+//            container[x]->toNode->dijkstraHandler(container, currentWeight, visited, destNode);
+
+          //}
+      //}
+
+    
   }
 
 }

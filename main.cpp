@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <time.h>
 #include "Node.h"
 
 const int nodeTotal = 16; // Number of nodes in the program
@@ -143,11 +144,32 @@ void activateNodes(Node **array)
 
 }
 
+std::vector<Node*> getActiveNodeList(Node **array)
+{
 
+  std::vector<Node*> newList;
+
+  // Populate newList with all active nodes in array
+  for(int x = 0; x < nodeTotal; x++)
+  {
+    for(int y = 0; y < nodeTotal; y++)
+    {
+      if(array[x][y].isActive())
+      {
+        newList.push_back(&array[x][y]);
+      }
+    }
+
+  }
+
+  return newList;
+
+}
 
 int main()
 {
 
+    srand(time(NULL));
 
     // Delete old output file from previous run
     if( remove( "output.txt" ) != 0 )
@@ -180,7 +202,18 @@ int main()
     setNeighbors(nodeGrid);
 
     // Start a packet delivery
-    nodeGrid[0][0].startPackageDelivery(&nodeGrid[15][15]);
+    // Add random sender and receiver
+    int randomNumberSender;
+    int randomNumberReceiver;
+    std::vector<Node*> activeNodes = getActiveNodeList(nodeGrid);
+    do {
+
+      randomNumberSender = rand() % nodeTotal;
+      randomNumberReceiver = rand() % nodeTotal;
+      std::cout << "Random Num = " << randomNumberSender << " and " << randomNumberReceiver << std::endl;
+
+    } while(randomNumberSender == randomNumberReceiver);
+    activeNodes[randomNumberSender]->startPackageDelivery(activeNodes[randomNumberReceiver]);
 
     // Based on how many nodes are selected create nodes in the grid
     // To keep the nodes far enough and spread out, break the grid into quadrants
