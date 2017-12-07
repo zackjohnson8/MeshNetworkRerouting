@@ -1,16 +1,7 @@
-# Network400
-Creating a Mesh network re-routing technique to handle pathing when nodes are lost.
+# Network 400 Disrupted Mesh Network
+By combining both Dijkstra and MST Prim's algorithms we have developed a unique way of traversing through a network of nodes/routes. Initially the package begins from any node in the network with a destination also given. The node who receives the package will begin finding the lowest weight path using Dijkstra. After the best path has been determined, the start node begins the delivery process. If during this delivery the path has been broken due to a unresponsive node, the current position of the package must find a new path from current node to destination node. This is done using the MST(Minimal Spanning Tree) Prim's editions of the algorithm. Once the new path is determined, the package is then retransmitted from current node to destination node.
 
-LINKS
-
-IEEE: 
-below SOAR opportunistic solution
-http://ieeexplore.ieee.org/document/4912211/#full-text-section
-
-below Information on Mesh networking
-http://ieeexplore.ieee.org/document/5169311/
-
-FORMAT EXAMPLE: 
-below 
-http://delivery.acm.org/10.1145/1030000/1023732/p114-draves.pdf?ip=134.197.0.24&id=1023732&acc=ACTIVE%20SERVICE&key=0763E6FB82016B22%2E4D4702B0C3E38B35%2E4D4702B0C3E38B35%2E4D4702B0C3E38B35&CFID=831428139&CFTOKEN=38834395&__acm__=1511135886_474202ae7b6be511406102855efafe4e
-
+COMPILE:
+Using Ubuntu Linux Distro in terminal run the following code,
+make
+./NodeSim

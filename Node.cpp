@@ -1,3 +1,13 @@
+/**
+  * @developers Zachary L. Johnson, Rony Calderon, and Logan Long
+  *
+  * @details Self repairing Mesh Network
+  *
+  * @version 1.00
+  *          Original development (December 6, 2017)
+  *
+*/
+
 #ifndef NODE_CPP
 #define NODE_CPP
 
@@ -467,7 +477,7 @@ void Node::dijkstraHandler(std::vector<Dijkstra*> container, int currentWeight, 
           //}
       //}
 
-    
+
   }
 
 }
